@@ -39,8 +39,6 @@
             this.btnUbah = new System.Windows.Forms.Button();
             this.btnRefresh = new System.Windows.Forms.Button();
             this.dgvPelanggan = new System.Windows.Forms.DataGridView();
-            this.label2 = new System.Windows.Forms.Label();
-            this.txtPassword = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPelanggan)).BeginInit();
             this.SuspendLayout();
             // 
@@ -134,37 +132,19 @@
             // dgvPelanggan
             // 
             this.dgvPelanggan.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvPelanggan.Location = new System.Drawing.Point(72, 423);
+            this.dgvPelanggan.Location = new System.Drawing.Point(72, 455);
             this.dgvPelanggan.Name = "dgvPelanggan";
             this.dgvPelanggan.RowHeadersWidth = 82;
             this.dgvPelanggan.RowTemplate.Height = 33;
-            this.dgvPelanggan.Size = new System.Drawing.Size(895, 400);
+            this.dgvPelanggan.Size = new System.Drawing.Size(895, 368);
             this.dgvPelanggan.TabIndex = 12;
             this.dgvPelanggan.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvPelanggan_CellContentClick);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(67, 361);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(106, 25);
-            this.label2.TabIndex = 13;
-            this.label2.Text = "Password";
-            // 
-            // txtPassword
-            // 
-            this.txtPassword.Location = new System.Drawing.Point(221, 358);
-            this.txtPassword.Name = "txtPassword";
-            this.txtPassword.Size = new System.Drawing.Size(486, 31);
-            this.txtPassword.TabIndex = 14;
             // 
             // Pelanggan
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1028, 864);
-            this.Controls.Add(this.txtPassword);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.dgvPelanggan);
             this.Controls.Add(this.btnRefresh);
             this.Controls.Add(this.btnUbah);
@@ -198,8 +178,6 @@
         private System.Windows.Forms.Button btnUbah;
         private System.Windows.Forms.Button btnRefresh;
         private System.Windows.Forms.DataGridView dgvPelanggan;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox txtPassword;
     }
 }
 

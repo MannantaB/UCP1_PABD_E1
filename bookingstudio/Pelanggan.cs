@@ -25,7 +25,6 @@ namespace bookingstudio
             txtNama.Clear();
             txtEmail.Clear();
             txtTelepon.Clear();
-            txtPassword.Clear();
             txtNama.Focus();
             currentPelangganID = -1;
         }
@@ -37,7 +36,7 @@ namespace bookingstudio
                 try
                 {
                     conn.Open();
-                    string query = "SELECT PelangganID, Nama, Email, Telepon, Password FROM Pelanggan";
+                    string query = "SELECT PelangganID, Nama, Email, Telepon FROM Pelanggan";
                     SqlDataAdapter da = new SqlDataAdapter(query, conn);
                     DataTable dt = new DataTable();
                     da.Fill(dt);
@@ -60,20 +59,20 @@ namespace bookingstudio
             {
                 try
                 {
-                    if (string.IsNullOrWhiteSpace(txtNama.Text) || string.IsNullOrWhiteSpace(txtEmail.Text) || string.IsNullOrWhiteSpace(txtTelepon.Text) || string.IsNullOrWhiteSpace(txtPassword.Text))
+                    if (string.IsNullOrWhiteSpace(txtNama.Text) || string.IsNullOrWhiteSpace(txtEmail.Text) || string.IsNullOrWhiteSpace(txtTelepon.Text))
                     {
                         MessageBox.Show("Harap isi semua data!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
 
                     conn.Open();
-                    string query = "INSERT INTO Pelanggan (Nama, Email, Telepon, Password) VALUES (@Nama, @Email, @Telepon, @Password)";
+                    string query = "INSERT INTO Pelanggan (Nama, Email, Telepon) VALUES (@Nama, @Email, @Telepon)";
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@Nama", txtNama.Text.Trim());
                         cmd.Parameters.AddWithValue("@Email", txtEmail.Text.Trim());
                         cmd.Parameters.AddWithValue("@Telepon", txtTelepon.Text.Trim());
-                        cmd.Parameters.AddWithValue("@Password", txtPassword.Text.Trim());
+            
 
                         int rowsAffected = cmd.ExecuteNonQuery();
                         if (rowsAffected > 0)
@@ -106,20 +105,19 @@ namespace bookingstudio
             {
                 try
                 {
-                    if (string.IsNullOrWhiteSpace(txtNama.Text) || string.IsNullOrWhiteSpace(txtEmail.Text) || string.IsNullOrWhiteSpace(txtTelepon.Text) )
+                    if (string.IsNullOrWhiteSpace(txtNama.Text) || string.IsNullOrWhiteSpace(txtEmail.Text))
                     {
                         MessageBox.Show("Harap isi semua data!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
 
                     conn.Open();
-                    string query = "UPDATE Pelanggan SET Nama = @Nama, Email = @Email, Telepon = @Telepon, Password = @Password WHERE PelangganID = @PelangganID";
+                    string query = "UPDATE Pelanggan SET Nama = @Nama, Email = @Email, Telepon = @Telepon WHERE PelangganID = @PelangganID";
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@Nama", txtNama.Text.Trim());
                         cmd.Parameters.AddWithValue("@Email", txtEmail.Text.Trim());
                         cmd.Parameters.AddWithValue("@Telepon", txtTelepon.Text.Trim());
-                        cmd.Parameters.AddWithValue("@Password", txtPassword.Text.Trim());
                         cmd.Parameters.AddWithValue("@PelangganID", currentPelangganID);
 
                         int rowsAffected = cmd.ExecuteNonQuery();
@@ -156,7 +154,6 @@ namespace bookingstudio
                 txtNama.Text = row.Cells[1].Value.ToString();
                 txtEmail.Text = row.Cells[2].Value.ToString();
                 txtTelepon.Text = row.Cells[3].Value.ToString();
-                txtPassword.Text = row.Cells[4].Value.ToString();
             }
         }
     }
