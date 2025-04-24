@@ -10,8 +10,7 @@ namespace SISTEM_BOOKING_FOTO_STUDIO
 {
     public partial class Form1 : Form
     {
-        SqlConnection conn = new SqlConnection("Data Source=.;Initial Catalog=BookingStudio;Integrated Security=True");
-
+        private string connectionString = "Data Source=DESKTOP-JNH7B7M\\MANNANTA;Initial Catalog=BookingStudio;Integrated Security=True";
         public Form1()
         {
             InitializeComponent();
@@ -25,8 +24,9 @@ namespace SISTEM_BOOKING_FOTO_STUDIO
 
         private void LoadStudio()
         {
-            try
-            {
+            using (SqlConnection conn = new SqlConnection(connectionString))
+                try
+                {
                 comboBox1.Items.Clear();
                 conn.Open();
                 SqlCommand cmd = new SqlCommand("SELECT NamaStudio FROM Studio", conn);
@@ -36,11 +36,11 @@ namespace SISTEM_BOOKING_FOTO_STUDIO
                     comboBox1.Items.Add(reader["NamaStudio"].ToString());
                 }
                 conn.Close();
-            }
-            catch (Exception ex)
-            {
+                }
+                catch (Exception ex)
+                {
                 MessageBox.Show("Error loading studios: " + ex.Message);
-            }
+                }
         }
 
         private void LoadPaket()

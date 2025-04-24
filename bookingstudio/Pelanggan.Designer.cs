@@ -132,11 +132,11 @@
             // dgvPelanggan
             // 
             this.dgvPelanggan.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvPelanggan.Location = new System.Drawing.Point(72, 455);
+            this.dgvPelanggan.Location = new System.Drawing.Point(72, 383);
             this.dgvPelanggan.Name = "dgvPelanggan";
             this.dgvPelanggan.RowHeadersWidth = 82;
             this.dgvPelanggan.RowTemplate.Height = 33;
-            this.dgvPelanggan.Size = new System.Drawing.Size(895, 368);
+            this.dgvPelanggan.Size = new System.Drawing.Size(896, 368);
             this.dgvPelanggan.TabIndex = 12;
             this.dgvPelanggan.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvPelanggan_CellContentClick);
             // 
@@ -144,7 +144,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1028, 864);
+            this.ClientSize = new System.Drawing.Size(1050, 831);
             this.Controls.Add(this.dgvPelanggan);
             this.Controls.Add(this.btnRefresh);
             this.Controls.Add(this.btnUbah);
