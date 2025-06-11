@@ -32,9 +32,16 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>bookingstudio.Program</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.ReportViewer.WinForms, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportViewer.WinForms.v12.12.0.0.1\lib\Microsoft.ReportViewer.WinForms.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -52,28 +59,88 @@
     <Compile Include="Booking.Designer.cs">
       <DependentUpon>Booking.cs</DependentUpon>
     </Compile>
+    <Compile Include="PesananSaya.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PesananSaya.Designer.cs">
+      <DependentUpon>PesananSaya.cs</DependentUpon>
+    </Compile>
+    <Compile Include="reportviewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="reportviewer.Designer.cs">
+      <DependentUpon>reportviewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Riwayat.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Riwayat.Designer.cs">
+      <DependentUpon>Riwayat.cs</DependentUpon>
+    </Compile>
     <Compile Include="Login.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Login.Designer.cs">
       <DependentUpon>Login.cs</DependentUpon>
     </Compile>
-    <Compile Include="Pelanggan.cs">
+    <Compile Include="main.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Pelanggan.Designer.cs">
-      <DependentUpon>Pelanggan.cs</DependentUpon>
+    <Compile Include="main.Designer.cs">
+      <DependentUpon>main.cs</DependentUpon>
+    </Compile>
+    <Compile Include="pembayaran.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="pembayaran.Designer.cs">
+      <DependentUpon>pembayaran.cs</DependentUpon>
+    </Compile>
+    <Compile Include="profil.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="profil.Designer.cs">
+      <DependentUpon>profil.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Register.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Register.Designer.cs">
+      <DependentUpon>Register.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RiwayatBookingSet.cs">
+      <DependentUpon>RiwayatBookingSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="RiwayatBookingSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RiwayatBookingSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="SessionUser.cs" />
     <EmbeddedResource Include="Booking.resx">
       <DependentUpon>Booking.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PesananSaya.resx">
+      <DependentUpon>PesananSaya.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="reportviewer.resx">
+      <DependentUpon>reportviewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Riwayat.resx">
+      <DependentUpon>Riwayat.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Pelanggan.resx">
-      <DependentUpon>Pelanggan.cs</DependentUpon>
+    <EmbeddedResource Include="main.resx">
+      <DependentUpon>main.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="pembayaran.resx">
+      <DependentUpon>pembayaran.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="profil.resx">
+      <DependentUpon>profil.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -83,7 +150,15 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Register.resx">
+      <DependentUpon>Register.cs</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="RiwayatBookingReport.rdlc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -93,9 +168,32 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="RiwayatBookingSet.xsc">
+      <DependentUpon>RiwayatBookingSet.xsd</DependentUpon>
+    </None>
+    <None Include="RiwayatBookingSet.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>RiwayatBookingSet.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="RiwayatBookingSet.xss">
+      <DependentUpon>RiwayatBookingSet.xsd</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\download %2812%29.jpeg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\An antique radio stands by the window a nostalgic reminder of a bygone era Generative AI _ Premium AI-generated image.jpeg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Abstract Brown Studio Professional Portrait Backdrop M10-31 - 10%27W_10%27H%283_3m%29.jpeg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\download.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

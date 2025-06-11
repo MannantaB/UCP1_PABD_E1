@@ -1,128 +1,275 @@
-﻿using System;
+﻿using bookingstudio;
+using System;
 using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
-using System.IO;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Runtime.Caching; // <--- untuk MemoryCache
 
-namespace SISTEM_BOOKING_FOTO_STUDIO
+namespace bookingstudio
 {
-    public partial class Form1 : Form
+    public partial class Booking : Form
     {
         private string connectionString = "Data Source=DESKTOP-JNH7B7M\\MANNANTA;Initial Catalog=BookingStudio;Integrated Security=True";
-        public Form1()
+        private int currentPelangganID;
+
+        public bool IsEditMode { get; set; } = false;
+        public int BookingIDToEdit { get; set; } = 0;
+        public BookingData SelectedData { get; set; }
+
+        public Booking(int pelangganID)
         {
             InitializeComponent();
-        }
+            currentPelangganID = pelangganID;
+            datePickerTanggal.Value = DateTime.Now;
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            LoadStudio();
-            LoadPaket();
-        }
+            LoadComboBoxData();
 
-        private void LoadStudio()
-        {
-            using (SqlConnection conn = new SqlConnection(connectionString))
-                try
-                {
-                comboBox1.Items.Clear();
-                conn.Open();
-                SqlCommand cmd = new SqlCommand("SELECT NamaStudio FROM Studio", conn);
-                SqlDataReader reader = cmd.ExecuteReader();
-                while (reader.Read())
-                {
-                    comboBox1.Items.Add(reader["NamaStudio"].ToString());
-                }
-                conn.Close();
-                }
-                catch (Exception ex)
-                {
-                MessageBox.Show("Error loading studios: " + ex.Message);
-                }
-        }
-
-        private void LoadPaket()
-        {
-            comboBox2.Items.Clear();
-            comboBox2.Items.Add("LolyPop");
-            comboBox2.Items.Add("Marshmallow");
-            comboBox2.Items.Add("CandyCane");
-        }
-
-        private void btnAdd_Click(object sender, EventArgs e)
-        {
-            if (ValidasiForm())
+            if (SelectedData != null)
             {
-                string studio = comboBox1.SelectedItem.ToString();
-                string paket = comboBox2.SelectedItem.ToString();
-                DateTime tanggal = dateTimePicker1.Value.Date;
-                TimeSpan jam = TimeSpan.Parse(numericUpDown1.Value.ToString() + ":00");
-                decimal harga = 150000; // bisa disesuaikan berdasarkan paket
-                string buktiTransfer = UploadGambar();
+                cmbStudio.SelectedItem = SelectedData.Studio;
+                cmbPaket.SelectedItem = SelectedData.Paket;
+                datePickerTanggal.Value = SelectedData.Tanggal;
+                numericJam.Value = (int)SelectedData.Jam;
+            }
+        }
 
+        public class BookingData
+        {
+            public string Nama { get; set; }
+            public string Studio { get; set; }
+            public string Paket { get; set; }
+            public DateTime Tanggal { get; set; }
+            public double Jam { get; set; }
+        }
+
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Apakah Anda yakin ingin keluar?", "Konfirmasi", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            main formmain = new main();
+            formmain.Show();
+            this.Hide();
+        }
+
+        private void btnSubmit_Click(object sender, EventArgs e)
+        {
+            string selectedStudio = cmbStudio.Text;
+            string selectedPaket = cmbPaket.SelectedItem?.ToString();
+            DateTime selectedDate = datePickerTanggal.Value;
+            string selectedTime = numericJam.Value.ToString();
+
+            if (string.IsNullOrEmpty(selectedStudio) || string.IsNullOrEmpty(selectedPaket))
+            {
+                MessageBox.Show("Semua field harus diisi!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (currentPelangganID <= 0)
+            {
+                MessageBox.Show("User belum login atau PelangganID tidak valid.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            string[] paketParts = selectedPaket.Split('|');
+            if (paketParts.Length != 3)
+            {
+                MessageBox.Show("Format paket tidak valid!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            int paketID = Convert.ToInt32(paketParts[0].Trim());
+            string paketName = paketParts[1].Trim();
+            decimal harga = Convert.ToDecimal(paketParts[2].Trim());
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
                 try
                 {
                     conn.Open();
-                    SqlCommand cmd = new SqlCommand("INSERT INTO Booking (PelangganID, StudioID, Paket, Harga, Tanggal, Jam) VALUES (@PelangganID, @StudioID, @Paket, @Harga, @Tanggal, @Jam); SELECT SCOPE_IDENTITY();", conn);
-                    cmd.Parameters.AddWithValue("@PelangganID", 1); // Sesuaikan login
-                    cmd.Parameters.AddWithValue("@StudioID", GetStudioID(studio));
-                    cmd.Parameters.AddWithValue("@Paket", paket);
-                    cmd.Parameters.AddWithValue("@Harga", harga);
-                    cmd.Parameters.AddWithValue("@Tanggal", tanggal);
-                    cmd.Parameters.AddWithValue("@Jam", jam);
-                    int bookingID = Convert.ToInt32(cmd.ExecuteScalar());
+                    SqlTransaction transaction = conn.BeginTransaction();
 
-                    SqlCommand pembayaranCmd = new SqlCommand("INSERT INTO Pembayaran (BookingID, Tanggal, Jumlah, Bukti_Transfer) VALUES (@BookingID, @Tanggal, @Jumlah, @Bukti)", conn);
-                    pembayaranCmd.Parameters.AddWithValue("@BookingID", bookingID);
-                    pembayaranCmd.Parameters.AddWithValue("@Tanggal", tanggal);
-                    pembayaranCmd.Parameters.AddWithValue("@Jumlah", harga);
-                    pembayaranCmd.Parameters.AddWithValue("@Bukti", buktiTransfer);
-                    pembayaranCmd.ExecuteNonQuery();
+                    try
+                    {
+                        int pelangganID = currentPelangganID;
 
-                    MessageBox.Show("Booking berhasil!");
-                    conn.Close();
+                        int studioID = 0;
+                        using (SqlCommand cmdGetStudioID = new SqlCommand("SELECT StudioID FROM Studio WHERE NamaStudio = @NamaStudio", conn, transaction))
+                        {
+                            cmdGetStudioID.Parameters.AddWithValue("@NamaStudio", selectedStudio);
+                            object result = cmdGetStudioID.ExecuteScalar();
+                            if (result == null || result == DBNull.Value)
+                            {
+                                MessageBox.Show("Studio tidak ditemukan!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                transaction.Rollback();
+                                return;
+                            }
+                            studioID = Convert.ToInt32(result);
+                        }
+
+                        using (SqlCommand cmdCheckPaket = new SqlCommand("SELECT COUNT(1) FROM Paket WHERE PaketID = @PaketID", conn, transaction))
+                        {
+                            cmdCheckPaket.Parameters.AddWithValue("@PaketID", paketID);
+                            int paketExists = (int)cmdCheckPaket.ExecuteScalar();
+
+                            if (paketExists == 0)
+                            {
+                                MessageBox.Show("Paket tidak valid atau tidak ditemukan!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                transaction.Rollback();
+                                return;
+                            }
+                        }
+
+                        if (IsEditMode)
+                        {
+                            using (SqlCommand cmdEditBooking = new SqlCommand("spUpdateBooking", conn, transaction))
+                            {
+                                cmdEditBooking.CommandType = CommandType.StoredProcedure;
+                                cmdEditBooking.Parameters.AddWithValue("@BookingID", BookingIDToEdit);
+                                cmdEditBooking.Parameters.AddWithValue("@StudioID", studioID);
+                                cmdEditBooking.Parameters.AddWithValue("@PaketID", paketID);
+                                cmdEditBooking.Parameters.AddWithValue("@Tanggal", selectedDate.Date);
+                                cmdEditBooking.Parameters.AddWithValue("@Jam", TimeSpan.Parse(selectedTime + ":00"));
+
+                                cmdEditBooking.ExecuteNonQuery();
+                            }
+
+                            // 🔥 Hapus cache setelah edit
+                            ClearRiwayatCache();
+
+                            transaction.Commit();
+                            MessageBox.Show("Booking berhasil diperbarui!", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            this.Close();
+                        }
+                        else
+                        {
+                            int bookingID = 0;
+                            using (SqlCommand cmdInsertBooking = new SqlCommand("spAddBookingStudio", conn, transaction))
+                            {
+                                cmdInsertBooking.CommandType = CommandType.StoredProcedure;
+                                cmdInsertBooking.Parameters.AddWithValue("@PelangganID", pelangganID);
+                                cmdInsertBooking.Parameters.AddWithValue("@StudioID", studioID);
+                                cmdInsertBooking.Parameters.AddWithValue("@PaketID", paketID);
+                                cmdInsertBooking.Parameters.AddWithValue("@Tanggal", selectedDate.Date);
+                                cmdInsertBooking.Parameters.AddWithValue("@Jam", TimeSpan.Parse(selectedTime + ":00"));
+
+                                object result = cmdInsertBooking.ExecuteScalar();
+                                if (result == null || result == DBNull.Value)
+                                {
+                                    transaction.Rollback();
+                                    MessageBox.Show("Booking gagal dibuat!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    return;
+                                }
+
+                                bookingID = Convert.ToInt32(result);
+                            }
+
+                            // 🔥 Hapus cache setelah insert
+                            ClearRiwayatCache();
+
+                            transaction.Commit();
+                            MessageBox.Show("Booking berhasil disimpan!", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            ClearForm();
+                            pembayaran formpembayaran = new pembayaran(bookingID);
+                            formpembayaran.Show();
+                            this.Hide();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        MessageBox.Show("Gagal menyimpan: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Gagal simpan data: " + ex.Message);
+                    MessageBox.Show("Koneksi gagal: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
 
-        private int GetStudioID(string namaStudio)
+        private void ClearForm()
         {
-            SqlCommand cmd = new SqlCommand("SELECT StudioID FROM Studio WHERE NamaStudio = @Nama", conn);
-            cmd.Parameters.AddWithValue("@Nama", namaStudio);
-            return (int)cmd.ExecuteScalar();
+            cmbStudio.SelectedIndex = -1;
+            cmbPaket.SelectedIndex = -1;
+            datePickerTanggal.Value = DateTime.Now;
+            numericJam.Value = 1;
         }
 
-        private string UploadGambar()
+        private void LoadComboBoxData()
         {
-            using (OpenFileDialog ofd = new OpenFileDialog())
+            using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                ofd.Filter = "Image Files|.jpg;.jpeg;*.png;";
-                if (ofd.ShowDialog() == DialogResult.OK)
+                try
                 {
-                    string fileName = Path.GetFileName(ofd.FileName);
-                    string destPath = Path.Combine(Application.StartupPath, "uploads", fileName);
-                    Directory.CreateDirectory(Path.GetDirectoryName(destPath));
-                    File.Copy(ofd.FileName, destPath, true);
-                    return destPath;
+                    conn.Open();
+
+                    using (SqlCommand cmd = new SqlCommand("SELECT NamaStudio FROM Studio", conn))
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        cmbStudio.Items.Clear();
+                        while (reader.Read())
+                        {
+                            cmbStudio.Items.Add(reader["NamaStudio"].ToString());
+                        }
+                    }
+
+                    using (SqlCommand cmd = new SqlCommand("SELECT PaketID, NamaPaket, Harga FROM Paket", conn))
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        cmbPaket.Items.Clear();
+                        while (reader.Read())
+                        {
+                            int paketID = Convert.ToInt32(reader["PaketID"]);
+                            string namaPaket = reader["NamaPaket"].ToString();
+                            decimal harga = Convert.ToDecimal(reader["Harga"]);
+                            cmbPaket.Items.Add($"{paketID} | {namaPaket} | {harga}");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Gagal load combo: " + ex.Message);
                 }
             }
-            return null;
         }
 
-        private bool ValidasiForm()
+        private void ClearRiwayatCache()
         {
-            if (string.IsNullOrWhiteSpace(textBox1.Text) || comboBox1.SelectedIndex == -1 || comboBox2.SelectedIndex == -1)
-            {
-                MessageBox.Show("Harap lengkapi semua data!");
-                return false;
-            }
-            return true;
+            MemoryCache.Default.Remove($"RiwayatBooking_{currentPelangganID}");
         }
+
+        private void AnalyzeQuery(string sqlQuery)
+        {
+            using (var conn = new SqlConnection(connectionString))
+            {
+                conn.InfoMessage += (s, e) => MessageBox.Show(e.Message, "STATISTICS INFO");
+                conn.Open();
+
+                var wrapped = $@"
+                    SET STATISTICS IO ON;
+                    SET STATISTICS TIME ON;
+                    {sqlQuery};
+                    SET STATISTICS IO OFF;
+                    SET STATISTICS TIME OFF;";
+
+                using (var cmd = new SqlCommand(wrapped, conn))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        private void btnAnalyze_Click_1(object sender, EventArgs e)
+        {
+            string query = @"
+                SELECT b.BookingID, s.NamaStudio, p.NamaPaket, b.Tanggal, b.Jam
+                FROM Booking b
+                JOIN Studio s ON b.StudioID = s.StudioID
+                JOIN Paket p ON b.PaketID = p.PaketID
+                WHERE b.PelangganID = 1";
+            AnalyzeQuery(query);
+        }
+
+        
     }
 }

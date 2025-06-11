@@ -16,7 +16,7 @@ namespace bookingstudio
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Pelanggan());
+            Application.Run(new Login());
         }
     }
 }

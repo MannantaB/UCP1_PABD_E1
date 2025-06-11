@@ -117,17 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="download (12)" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\download (12).jpeg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="An antique radio stands by the window a nostalgic reminder of a bygone era Generative AI _ Premium AI-generated image" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\An antique radio stands by the window a nostalgic reminder of a bygone era Generative AI _ Premium AI-generated image.jpeg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Abstract Brown Studio Professional Portrait Backdrop M10-31 - 10'W_10'H(3_3m)" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Abstract Brown Studio Professional Portrait Backdrop M10-31 - 10'W_10'H(3_3m).jpeg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="download" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\download.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
 </root>

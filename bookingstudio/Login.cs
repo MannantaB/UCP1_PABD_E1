@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using bookingstudio;
+using System;
 using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace bookingstudio
@@ -14,67 +9,103 @@ namespace bookingstudio
     public partial class Login : Form
     {
         private string connectionString = "Data Source=DESKTOP-JNH7B7M\\MANNANTA;Initial Catalog=BookingStudio;Integrated Security=True";
+
         public Login()
         {
             InitializeComponent();
         }
 
-        private void Login_Load(object sender, EventArgs e)
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            ClearForm();
+        }
+
+        private void ClearForm()
         {
             txtEmail.Clear();
             txtPassword.Clear();
-
-            txtEmail.Focus();
-
-            txtPassword.PasswordChar = '*';
         }
 
-        private void btnSubmit_Click(object sender, EventArgs e)
+        private void btnLogin_Click(object sender, EventArgs e)
         {
             string email = txtEmail.Text.Trim();
-            string password = txtPassword.Text.Trim(); // Bisa dihapus jika tidak memerlukan password
+            string password = txtPassword.Text.Trim();
 
-            // Validasi email
-            if (string.IsNullOrWhiteSpace(email))
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
             {
-                MessageBox.Show("Email tidak boleh kosong!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Email dan Password tidak boleh kosong!");
                 return;
             }
 
-            // Menggunakan connection string yang sudah ditentukan
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 try
                 {
                     conn.Open();
-                    // Query untuk validasi email dan password
-                    string query = "SELECT * FROM Pelanggan WHERE Email = @Email AND Password = @Password"; // Pastikan kolom Password ada
-                    SqlCommand cmd = new SqlCommand(query, conn);
+
+                    SqlCommand cmd = new SqlCommand("spLoginUser", conn);
+                    cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@Email", email);
-                    cmd.Parameters.AddWithValue("@Password", password); // Hapus kalau tidak pakai password
+                    cmd.Parameters.AddWithValue("@Password", password);
 
                     SqlDataReader reader = cmd.ExecuteReader();
 
                     if (reader.Read())
                     {
-                        int pelangganID = Convert.ToInt32(reader["PelangganID"]);
+                        // ✅ Ambil data dari hasil query login
+                        SessionUser.PelangganID = reader.GetInt32(0);         // PelangganID
+                        SessionUser.Nama = reader["Nama"].ToString();        // Nama
+                        SessionUser.Email = reader["Email"].ToString();      // Email
 
-                        // Mengarahkan ke halaman Edit Profil setelah login berhasil
-                        Pelanggan Form1 = new Pelanggan(pelangganID); // Pastikan form EditProfil sudah dibuat
-                        Form1.Show();
-                        this.Hide(); // Menyembunyikan form login setelah berhasil login
+                        // ✅ Buka form utama
+                        main mainForm = new main();
+                        mainForm.Show();
+                        this.Hide();
                     }
                     else
                     {
-                        MessageBox.Show("Email atau password salah!", "Login Gagal", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show("Email atau Password salah.");
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Terjadi kesalahan: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Terjadi kesalahan: " + ex.Message);
                 }
             }
+        }
 
+        private void btnRegister_Click(object sender, EventArgs e)
+        {
+            Register formRegistrasi = new Register();
+            formRegistrasi.Show();
+            this.Hide();
+        }
+
+        private void AnalyzeQuery(string sqlQuery)
+        {
+            using (var conn = new SqlConnection(connectionString))
+            {
+                conn.InfoMessage += (s, e) => MessageBox.Show(e.Message, "STATISTICS INFO");
+                conn.Open();
+
+                var wrapped = $@"
+                    SET STATISTICS IO ON;
+                    SET STATISTICS TIME ON;
+                    {sqlQuery};
+                    SET STATISTICS IO OFF;
+                    SET STATISTICS TIME OFF;";
+
+                using (var cmd = new SqlCommand(wrapped, conn))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        private void btnAnalyze_Click_1(object sender, EventArgs e)
+        {
+            string query = "SELECT PelangganID FROM Pelanggan WHERE Email = 'user@example.com'";
+            AnalyzeQuery(query);
         }
     }
 }
