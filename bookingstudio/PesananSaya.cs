@@ -11,9 +11,11 @@ namespace bookingstudio
         private int PelangganID;
         private string connectionString = "Data Source=DESKTOP-JNH7B7M\\MANNANTA;Initial Catalog=BookingStudio;Integrated Security=True";
 
-        public PesananSaya()
+        // ✅ Constructor diperbaiki agar menerima PelangganID
+        public PesananSaya(int pelangganID)
         {
             InitializeComponent();
+            this.PelangganID = pelangganID;
         }
 
         private void PesananSaya_Load(object sender, EventArgs e)
@@ -27,7 +29,15 @@ namespace bookingstudio
             {
                 SqlCommand cmd = new SqlCommand("spGetPesananAktif", conn);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@PelangganID", SessionUser.PelangganID);
+
+                // ✅ Pastikan ID pelanggan valid
+                if (PelangganID <= 0)
+                {
+                    MessageBox.Show("User belum login atau PelangganID tidak valid.");
+                    return;
+                }
+
+                cmd.Parameters.AddWithValue("@PelangganID", PelangganID);
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
@@ -90,6 +100,7 @@ namespace bookingstudio
 
                         string paketFormatted = $"{paketID} | {namaPaket} | {harga}";
 
+                        // ✅ Pastikan ID pelanggan dikirim ke form Booking
                         Booking formBooking = new Booking(PelangganID)
                         {
                             IsEditMode = true,
@@ -131,8 +142,6 @@ namespace bookingstudio
                 LoadPesanan();
             }
         }
-
-        
 
         private void UpdateStatus(int bookingID, string status)
         {

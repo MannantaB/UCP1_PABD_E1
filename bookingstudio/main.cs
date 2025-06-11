@@ -40,7 +40,7 @@ namespace bookingstudio
             formBooking.Show();
         }
 
-      
+
 
         private void button3_Click_1(object sender, EventArgs e)
         {
@@ -53,14 +53,14 @@ namespace bookingstudio
 
             if (result == DialogResult.Yes)
             {
-                
+
                 Login formLogin = new Login();
                 formLogin.Show();
                 this.Hide();
             }
             else
             {
-               
+
             }
 
         }
@@ -112,9 +112,9 @@ namespace bookingstudio
 
         private void button4_Click(object sender, EventArgs e)
         {
-            PesananSaya PesananSayaForm = new PesananSaya();
-            PesananSayaForm.Show();
-            this.Hide();
+            PesananSaya pesananForm = new PesananSaya(SessionUser.PelangganID);
+            pesananForm.Show();
+            this.Hide(); // opsional, kalau kamu mau sembunyikan form utama
         }
     }
 
