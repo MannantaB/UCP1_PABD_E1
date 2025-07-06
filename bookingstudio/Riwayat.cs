@@ -88,9 +88,9 @@ namespace bookingstudio
 
         private void btnExit_Click(object sender, EventArgs e)
         {
-            main formmain = new main();
-            formmain.Show();
-            this.Hide();
+            main mainForm = new main();
+            mainForm.Show();
+            this.Close();
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)

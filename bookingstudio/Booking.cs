@@ -11,6 +11,7 @@ namespace bookingstudio
     {
         private string connectionString = "Data Source=DESKTOP-JNH7B7M\\MANNANTA;Initial Catalog=BookingStudio;Integrated Security=True";
         private int currentPelangganID;
+        private main _mainForm;
 
         public bool IsEditMode { get; set; } = false;
         public int BookingIDToEdit { get; set; } = 0;
@@ -46,9 +47,9 @@ namespace bookingstudio
         {
             DialogResult result = MessageBox.Show("Apakah Anda yakin ingin keluar?", "Konfirmasi", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-            main formmain = new main();
-            formmain.Show();
-            this.Hide();
+            main mainForm = new main();
+            mainForm.Show();
+            this.Close();
         }
 
         private void btnSubmit_Click(object sender, EventArgs e)

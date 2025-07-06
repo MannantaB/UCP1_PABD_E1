@@ -32,8 +32,9 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.lblPath = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.btnUpload = new System.Windows.Forms.Button();
+            this.btnPayNow = new System.Windows.Forms.Button();
             this.btnAnalyze = new System.Windows.Forms.Button();
+            this.btnPayLater = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -71,25 +72,34 @@
             this.label2.TabIndex = 2;
             this.label2.Text = "PAYMENT";
             // 
-            // btnUpload
+            // btnPayNow
             // 
-            this.btnUpload.Location = new System.Drawing.Point(378, 631);
-            this.btnUpload.Name = "btnUpload";
-            this.btnUpload.Size = new System.Drawing.Size(188, 55);
-            this.btnUpload.TabIndex = 3;
-            this.btnUpload.Text = "Upload";
-            this.btnUpload.UseVisualStyleBackColor = true;
-            this.btnUpload.Click += new System.EventHandler(this.btnUpload_Click);
+            this.btnPayNow.Location = new System.Drawing.Point(645, 596);
+            this.btnPayNow.Name = "btnPayNow";
+            this.btnPayNow.Size = new System.Drawing.Size(188, 55);
+            this.btnPayNow.TabIndex = 3;
+            this.btnPayNow.Text = "Pay Now";
+            this.btnPayNow.UseVisualStyleBackColor = true;
+            this.btnPayNow.Click += new System.EventHandler(this.btnUpload_Click);
             // 
             // btnAnalyze
             // 
-            this.btnAnalyze.Location = new System.Drawing.Point(12, 677);
+            this.btnAnalyze.Location = new System.Drawing.Point(39, 679);
             this.btnAnalyze.Name = "btnAnalyze";
             this.btnAnalyze.Size = new System.Drawing.Size(138, 53);
             this.btnAnalyze.TabIndex = 13;
             this.btnAnalyze.Text = "ANALYZE";
             this.btnAnalyze.UseVisualStyleBackColor = true;
             this.btnAnalyze.Click += new System.EventHandler(this.btnAnalyze_Click_1);
+            // 
+            // btnPayLater
+            // 
+            this.btnPayLater.Location = new System.Drawing.Point(428, 596);
+            this.btnPayLater.Name = "btnPayLater";
+            this.btnPayLater.Size = new System.Drawing.Size(188, 55);
+            this.btnPayLater.TabIndex = 14;
+            this.btnPayLater.Text = "Pay Later";
+            this.btnPayLater.UseVisualStyleBackColor = true;
             // 
             // pembayaran
             // 
@@ -98,8 +108,9 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(967, 774);
+            this.Controls.Add(this.btnPayLater);
             this.Controls.Add(this.btnAnalyze);
-            this.Controls.Add(this.btnUpload);
+            this.Controls.Add(this.btnPayNow);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.lblPath);
             this.Controls.Add(this.pictureBox1);
@@ -116,7 +127,8 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label lblPath;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button btnUpload;
+        private System.Windows.Forms.Button btnPayNow;
         private System.Windows.Forms.Button btnAnalyze;
+        private System.Windows.Forms.Button btnPayLater;
     }
 }

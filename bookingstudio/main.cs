@@ -116,6 +116,11 @@ namespace bookingstudio
             pesananForm.Show();
             this.Hide(); // opsional, kalau kamu mau sembunyikan form utama
         }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 
 

@@ -119,9 +119,9 @@ namespace bookingstudio
 
         private void btnExit_Click(object sender, EventArgs e)
         {
-            main formmain = new main(); // Panggil form utama
-            formmain.Show();
-            this.Hide();
+            main mainForm = new main();
+            mainForm.Show();
+            this.Close();
         }
     }
 }
