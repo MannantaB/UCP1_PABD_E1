@@ -17,6 +17,7 @@ namespace bookingstudio
         public int BookingIDToEdit { get; set; } = 0;
         public BookingData SelectedData { get; set; }
 
+        public event Action OnBookingUpdated;
         public Booking(int pelangganID)
         {
             InitializeComponent();
@@ -34,6 +35,15 @@ namespace bookingstudio
             }
         }
 
+        public Booking(main mainForm, int pelangganId)
+        {
+            InitializeComponent();
+            _mainForm = mainForm;
+            currentPelangganID = pelangganId;
+            datePickerTanggal.Value = DateTime.Now;
+            LoadComboBoxData();
+        }
+
         public class BookingData
         {
             public string Nama { get; set; }
@@ -46,10 +56,11 @@ namespace bookingstudio
         private void btnExit_Click(object sender, EventArgs e)
         {
             DialogResult result = MessageBox.Show("Apakah Anda yakin ingin keluar?", "Konfirmasi", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-            main mainForm = new main();
-            mainForm.Show();
-            this.Close();
+            if (result == DialogResult.Yes)
+            {
+                if (_mainForm != null) _mainForm.Show();
+                this.Close();
+            }
         }
 
         private void btnSubmit_Click(object sender, EventArgs e)
@@ -79,7 +90,6 @@ namespace bookingstudio
             }
 
             int paketID = Convert.ToInt32(paketParts[0].Trim());
-            string paketName = paketParts[1].Trim();
             decimal harga = Convert.ToDecimal(paketParts[2].Trim());
 
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -91,16 +101,14 @@ namespace bookingstudio
 
                     try
                     {
-                        int pelangganID = currentPelangganID;
-
-                        int studioID = 0;
+                        int studioID;
                         using (SqlCommand cmdGetStudioID = new SqlCommand("SELECT StudioID FROM Studio WHERE NamaStudio = @NamaStudio", conn, transaction))
                         {
                             cmdGetStudioID.Parameters.AddWithValue("@NamaStudio", selectedStudio);
                             object result = cmdGetStudioID.ExecuteScalar();
-                            if (result == null || result == DBNull.Value)
+                            if (result == null)
                             {
-                                MessageBox.Show("Studio tidak ditemukan!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                MessageBox.Show("Studio tidak ditemukan!");
                                 transaction.Rollback();
                                 return;
                             }
@@ -110,11 +118,9 @@ namespace bookingstudio
                         using (SqlCommand cmdCheckPaket = new SqlCommand("SELECT COUNT(1) FROM Paket WHERE PaketID = @PaketID", conn, transaction))
                         {
                             cmdCheckPaket.Parameters.AddWithValue("@PaketID", paketID);
-                            int paketExists = (int)cmdCheckPaket.ExecuteScalar();
-
-                            if (paketExists == 0)
+                            if ((int)cmdCheckPaket.ExecuteScalar() == 0)
                             {
-                                MessageBox.Show("Paket tidak valid atau tidak ditemukan!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                MessageBox.Show("Paket tidak valid!");
                                 transaction.Rollback();
                                 return;
                             }
@@ -130,46 +136,44 @@ namespace bookingstudio
                                 cmdEditBooking.Parameters.AddWithValue("@PaketID", paketID);
                                 cmdEditBooking.Parameters.AddWithValue("@Tanggal", selectedDate.Date);
                                 cmdEditBooking.Parameters.AddWithValue("@Jam", TimeSpan.Parse(selectedTime + ":00"));
-
                                 cmdEditBooking.ExecuteNonQuery();
                             }
 
-                            // 🔥 Hapus cache setelah edit
                             ClearRiwayatCache();
-
                             transaction.Commit();
                             MessageBox.Show("Booking berhasil diperbarui!", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                            OnBookingUpdated?.Invoke(); // 🔥 Notifikasi ke PesananSaya
                             this.Close();
                         }
                         else
                         {
-                            int bookingID = 0;
+                            int bookingID;
                             using (SqlCommand cmdInsertBooking = new SqlCommand("spAddBookingStudio", conn, transaction))
                             {
                                 cmdInsertBooking.CommandType = CommandType.StoredProcedure;
-                                cmdInsertBooking.Parameters.AddWithValue("@PelangganID", pelangganID);
+                                cmdInsertBooking.Parameters.AddWithValue("@PelangganID", currentPelangganID);
                                 cmdInsertBooking.Parameters.AddWithValue("@StudioID", studioID);
                                 cmdInsertBooking.Parameters.AddWithValue("@PaketID", paketID);
                                 cmdInsertBooking.Parameters.AddWithValue("@Tanggal", selectedDate.Date);
                                 cmdInsertBooking.Parameters.AddWithValue("@Jam", TimeSpan.Parse(selectedTime + ":00"));
 
                                 object result = cmdInsertBooking.ExecuteScalar();
-                                if (result == null || result == DBNull.Value)
+                                if (result == null)
                                 {
                                     transaction.Rollback();
-                                    MessageBox.Show("Booking gagal dibuat!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    MessageBox.Show("Gagal membuat booking!");
                                     return;
                                 }
 
                                 bookingID = Convert.ToInt32(result);
                             }
 
-                            // 🔥 Hapus cache setelah insert
                             ClearRiwayatCache();
-
                             transaction.Commit();
                             MessageBox.Show("Booking berhasil disimpan!", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             ClearForm();
+
                             pembayaran formpembayaran = new pembayaran(bookingID);
                             formpembayaran.Show();
                             this.Hide();
@@ -178,12 +182,12 @@ namespace bookingstudio
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        MessageBox.Show("Gagal menyimpan: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Gagal menyimpan: " + ex.Message);
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Koneksi gagal: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Koneksi gagal: " + ex.Message);
                 }
             }
         }
@@ -267,7 +271,7 @@ namespace bookingstudio
                 FROM Booking b
                 JOIN Studio s ON b.StudioID = s.StudioID
                 JOIN Paket p ON b.PaketID = p.PaketID
-                WHERE b.PelangganID = 1";
+                WHERE b.PelangganID = {currentPelangganID}";
             AnalyzeQuery(query);
         }
 
