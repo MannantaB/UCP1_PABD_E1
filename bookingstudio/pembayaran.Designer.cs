@@ -46,7 +46,6 @@
             this.pictureBox1.Size = new System.Drawing.Size(699, 373);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
-            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
             // lblPath
             // 
@@ -80,7 +79,7 @@
             this.btnPayNow.TabIndex = 3;
             this.btnPayNow.Text = "Pay Now";
             this.btnPayNow.UseVisualStyleBackColor = true;
-            this.btnPayNow.Click += new System.EventHandler(this.btnUpload_Click);
+            this.btnPayNow.Click += new System.EventHandler(this.btnPayNow_Click);
             // 
             // btnAnalyze
             // 
@@ -100,6 +99,7 @@
             this.btnPayLater.TabIndex = 14;
             this.btnPayLater.Text = "Pay Later";
             this.btnPayLater.UseVisualStyleBackColor = true;
+            this.btnPayLater.Click += new System.EventHandler(this.btnPayLater_Click);
             // 
             // pembayaran
             // 

@@ -29,18 +29,16 @@ namespace bookingstudio
 
         private void LoadPesanan()
         {
+            if (PelangganID <= 0)
+            {
+                MessageBox.Show("User belum login atau PelangganID tidak valid.");
+                return;
+            }
+
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 SqlCommand cmd = new SqlCommand("spGetPesananAktif", conn);
                 cmd.CommandType = CommandType.StoredProcedure;
-
-                // ✅ Pastikan ID pelanggan valid
-                if (PelangganID <= 0)
-                {
-                    MessageBox.Show("User belum login atau PelangganID tidak valid.");
-                    return;
-                }
-
                 cmd.Parameters.AddWithValue("@PelangganID", PelangganID);
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
@@ -119,6 +117,12 @@ namespace bookingstudio
                             }
                         };
 
+                        formBooking.OnBookingUpdated += () =>
+                        {
+                            this.Show();
+                            LoadPesanan();
+                        };
+
                         this.Hide();
                         formBooking.Show();
                     }
@@ -173,6 +177,17 @@ namespace bookingstudio
         {
             _mainForm.Show();
             this.Close();
+        }
+
+        private void btnPayNow_Click(object sender, EventArgs e)
+        {
+            int bookingID = GetSelectedBookingID();
+            if (bookingID == -1) return;
+
+            // Buka form pembayaran dengan mode 'pesanan'
+            pembayaran formPembayaran = new pembayaran(bookingID, "pesanan");
+            formPembayaran.Show();
+            this.Hide();
         }
     }
 }

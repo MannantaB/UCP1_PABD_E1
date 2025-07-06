@@ -9,53 +9,68 @@ namespace bookingstudio
     public partial class pembayaran : Form
     {
         private int _bookingID;
+        private string _mode; // "booking" atau "pesanan"
         private string connectionString = "Data Source=DESKTOP-JNH7B7M\\MANNANTA;Initial Catalog=BookingStudio;Integrated Security=True";
         private string selectedFilePath;
         private string folderPath;
 
-        public pembayaran(int bookingID)
+        private const long MaxFileSize = 2 * 1024 * 1024; // 2 MB
+
+        public pembayaran(int bookingID, string mode = "booking")
         {
             InitializeComponent();
             _bookingID = bookingID;
+            _mode = mode;
 
             string projectRootPath = @"C:\VISUALSTUDIO2022";
             folderPath = Path.Combine(projectRootPath, "BuktiBayar");
 
-            // Pastikan folder ada
             if (!Directory.Exists(folderPath))
             {
                 Directory.CreateDirectory(folderPath);
             }
+
+            // Sembunyikan tombol "Bayar Nanti" kalau dibuka dari form PesananSaya
+            if (_mode == "pesanan")
+            {
+                btnPayLater.Visible = false;
+            }
         }
 
-        private void btnUpload_Click(object sender, EventArgs e)
+        private void btnPayNow_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "All Files|.";
-
+            openFileDialog.Filter = "Image Files (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png";
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 selectedFilePath = openFileDialog.FileName;
 
-                // Preview gambar
+                FileInfo fileInfo = new FileInfo(selectedFilePath);
+                if (fileInfo.Length > MaxFileSize)
+                {
+                    MessageBox.Show("Ukuran file terlalu besar! Maksimal 2 MB.", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Tampilkan preview gambar
                 pictureBox1.Image = Image.FromFile(selectedFilePath);
                 pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
 
-                // Simpan gambar ke folder lokal
                 string fileName = Path.GetFileName(selectedFilePath);
                 string destinationPath = Path.Combine(folderPath, fileName);
 
                 try
                 {
-                    File.Copy(selectedFilePath, destinationPath, true); // overwrite jika file sama
+                    File.Copy(selectedFilePath, destinationPath, true);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Gagal menyimpan file ke folder: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Gagal menyimpan file ke folder lokal: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
+                // Simpan data ke database
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
@@ -63,20 +78,23 @@ namespace bookingstudio
 
                     try
                     {
-                        // Query insert pembayaran dengan transaction
+                        // Insert pembayaran
                         string query = "INSERT INTO Pembayaran (BookingID, Tanggal, Bukti_Transfer) VALUES (@BookingID, @Tanggal, @Bukti)";
                         SqlCommand cmd = new SqlCommand(query, conn, transaction);
                         cmd.Parameters.AddWithValue("@BookingID", _bookingID);
                         cmd.Parameters.AddWithValue("@Tanggal", DateTime.Now.Date);
-                        cmd.Parameters.AddWithValue("@Bukti", fileName);
+                        cmd.Parameters.AddWithValue("@Bukti", destinationPath);
                         cmd.ExecuteNonQuery();
 
-                        // Untuk testing error rollback, uncomment baris berikut:
-                        // throw new Exception("Testing error rollback pembayaran!");
+                        // Update status booking jadi "Selesai"
+                        string updateBooking = "UPDATE Booking SET Status = 'Selesai' WHERE BookingID = @BookingID";
+                        SqlCommand updateCmd = new SqlCommand(updateBooking, conn, transaction);
+                        updateCmd.Parameters.AddWithValue("@BookingID", _bookingID);
+                        updateCmd.ExecuteNonQuery();
 
                         transaction.Commit();
 
-                        MessageBox.Show("Bukti pembayaran berhasil diupload!", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Bukti pembayaran berhasil diupload! Status booking menjadi 'Selesai'.", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                         main formMain = new main();
                         formMain.Show();
@@ -89,6 +107,26 @@ namespace bookingstudio
                     }
                 }
             }
+        }
+
+        private void btnPayLater_Click(object sender, EventArgs e)
+        {
+            // Update status booking jadi 'Diajukan'
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+
+                string query = "UPDATE Booking SET Status = 'Diajukan' WHERE BookingID = @BookingID";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@BookingID", _bookingID);
+                cmd.ExecuteNonQuery();
+            }
+
+            MessageBox.Show("Silakan bayar nanti. Status booking telah diset menjadi 'Diajukan'.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            main formMain = new main();
+            formMain.Show();
+            this.Close();
         }
 
         private void AnalyzeQuery(string sqlQuery)
@@ -111,15 +149,12 @@ namespace bookingstudio
                 }
             }
         }
+
         private void btnAnalyze_Click_1(object sender, EventArgs e)
         {
-            string query = "SELECT * FROM Pembayaran WHERE BookingID = 1";
+            string query = "SELECT * FROM Pembayaran WHERE BookingID = @bookingID";
+            query = query.Replace("@bookingID", _bookingID.ToString());
             AnalyzeQuery(query);
-        }
-
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

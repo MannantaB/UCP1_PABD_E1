@@ -53,9 +53,9 @@
             // button2
             // 
             this.button2.Font = new System.Drawing.Font("Palatino Linotype", 13.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.Location = new System.Drawing.Point(278, 556);
+            this.button2.Location = new System.Drawing.Point(241, 554);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(254, 76);
+            this.button2.Size = new System.Drawing.Size(330, 76);
             this.button2.TabIndex = 1;
             this.button2.Text = "BOOK NOW";
             this.button2.UseVisualStyleBackColor = true;
@@ -76,7 +76,7 @@
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(139, 46);
             this.button3.TabIndex = 3;
-            this.button3.Text = "EXIT";
+            this.button3.Text = "LOGOUT";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click_1);
             // 
