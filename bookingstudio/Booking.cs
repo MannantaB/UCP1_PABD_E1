@@ -274,7 +274,5 @@ namespace bookingstudio
                 WHERE b.PelangganID = {currentPelangganID}";
             AnalyzeQuery(query);
         }
-
-
     }
 }

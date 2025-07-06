@@ -10,12 +10,16 @@ namespace bookingstudio
     {
         private int PelangganID;
         private string connectionString = "Data Source=DESKTOP-JNH7B7M\\MANNANTA;Initial Catalog=BookingStudio;Integrated Security=True";
+        private main _mainForm;
 
         // ✅ Constructor diperbaiki agar menerima PelangganID
-        public PesananSaya(int pelangganID)
+        public PesananSaya(main mainForm, int pelangganId)
         {
             InitializeComponent();
-            this.PelangganID = pelangganID;
+            _mainForm = mainForm;
+            this.PelangganID = pelangganId;
+
+            LoadPesanan();
         }
 
         private void PesananSaya_Load(object sender, EventArgs e)
@@ -167,8 +171,7 @@ namespace bookingstudio
 
         private void btnExit_Click(object sender, EventArgs e)
         {
-            main mainForm = new main();
-            mainForm.Show();
+            _mainForm.Show();
             this.Close();
         }
     }

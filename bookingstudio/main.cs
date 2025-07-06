@@ -29,15 +29,16 @@ namespace bookingstudio
 
         private void button1_Click(object sender, EventArgs e)
         {
-            profil formprofil = new profil(); // Panggil form Booking
-            formprofil.Show();                  // Tampilkan form Booking
+            profil formprofil = new profil(this); 
+            formprofil.Show();                 
             this.Hide();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Booking formBooking = new Booking(SessionUser.PelangganID); // atau ID login valid
+            Booking formBooking = new Booking(this, SessionUser.PelangganID); // atau ID login valid
             formBooking.Show();
+            this.Hide();
         }
 
 
@@ -49,7 +50,7 @@ namespace bookingstudio
              "Konfirmasi",
              MessageBoxButtons.YesNo,
              MessageBoxIcon.Question
-         );
+            );
 
             if (result == DialogResult.Yes)
             {
@@ -58,17 +59,20 @@ namespace bookingstudio
                 formLogin.Show();
                 this.Hide();
             }
-            else
-            {
-
-            }
-
         }
 
         private void btnRiwayat_Click(object sender, EventArgs e)
         {
-            Riwayat riwayatForm = new Riwayat(SessionUser.PelangganID);
+            Riwayat riwayatForm = new Riwayat(this, SessionUser.PelangganID);
             riwayatForm.Show();
+            this.Hide();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            PesananSaya pesananForm = new PesananSaya(this, SessionUser.PelangganID);
+            pesananForm.Show();
+            this.Hide(); // opsional, kalau kamu mau sembunyikan form utama
         }
 
         private void EnsureIndexes()
@@ -107,23 +111,9 @@ namespace bookingstudio
                     CREATE NONCLUSTERED INDEX idx_Pembayaran_BookingID ON Pembayaran(BookingID);
                 END;
             ";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.ExecuteNonQuery();
             }
         }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-            PesananSaya pesananForm = new PesananSaya(SessionUser.PelangganID);
-            pesananForm.Show();
-            this.Hide(); // opsional, kalau kamu mau sembunyikan form utama
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-
-        }
     }
-
-
-
-
 }

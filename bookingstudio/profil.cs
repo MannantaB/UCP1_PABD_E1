@@ -16,9 +16,12 @@ namespace bookingstudio
         private string CacheKey => $"Profil_{SessionUser.PelangganID}";
         private readonly CacheItemPolicy _policy = new CacheItemPolicy { AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(5) };
 
-        public profil()
+        private main _mainForm;
+
+        public profil(main mainForm)
         {
             InitializeComponent();
+            _mainForm = mainForm;
         }
 
         private void profil_Load(object sender, EventArgs e)
@@ -119,8 +122,7 @@ namespace bookingstudio
 
         private void btnExit_Click(object sender, EventArgs e)
         {
-            main mainForm = new main();
-            mainForm.Show();
+            _mainForm.Show();
             this.Close();
         }
     }

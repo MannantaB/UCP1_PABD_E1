@@ -114,7 +114,6 @@
             this.label2.Size = new System.Drawing.Size(534, 93);
             this.label2.TabIndex = 6;
             this.label2.Text = "Booking Studio";
-            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // main
             // 

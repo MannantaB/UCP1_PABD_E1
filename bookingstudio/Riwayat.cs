@@ -9,11 +9,13 @@ namespace bookingstudio
     {
         private int PelangganID;
         private string connectionString = "Data Source=DESKTOP-JNH7B7M\\MANNANTA;Initial Catalog=BookingStudio;Integrated Security=True";
+        private main _mainForm;
 
-        public Riwayat(int userId)
+        public Riwayat(main mainForm, int PelangganId)
         {
             InitializeComponent();
-            PelangganID = userId;
+            _mainForm = mainForm;   
+            PelangganID = PelangganId;
         }
 
         private void Riwayat_Load(object sender, EventArgs e)
@@ -88,19 +90,9 @@ namespace bookingstudio
 
         private void btnExit_Click(object sender, EventArgs e)
         {
-            main mainForm = new main();
-            mainForm.Show();
+            _mainForm.Show();
             this.Close();
         }
 
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
-        private void Riwayat_Load_1(object sender, EventArgs e)
-        {
-
-        }
     }
 }
