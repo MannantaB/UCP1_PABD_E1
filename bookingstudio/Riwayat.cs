@@ -14,7 +14,7 @@ namespace bookingstudio
         public Riwayat(main mainForm, int PelangganId)
         {
             InitializeComponent();
-            _mainForm = mainForm;   
+            _mainForm = mainForm;
             PelangganID = PelangganId;
         }
 
@@ -39,19 +39,24 @@ namespace bookingstudio
                     DataTable dt = new DataTable();
                     da.Fill(dt);
 
+                    dataGridView1.DataSource = dt;
+
+                    // ✅ Properti DGV
+                    dataGridView1.AutoGenerateColumns = true;
+                    dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+                    dataGridView1.MultiSelect = false;
+                    dataGridView1.ReadOnly = true;
+                    dataGridView1.AllowUserToAddRows = false;
+                    dataGridView1.AllowUserToDeleteRows = false;
+                    dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+                    // Format
+                    FormatDataGridView();
+
                     if (dt.Rows.Count == 0)
                     {
                         MessageBox.Show("Tidak ada data riwayat booking untuk user ini.");
-                        // Tetap tampilkan DataGridView kosong
-                        dataGridView1.DataSource = dt;
-                        return;
                     }
-
-                    dataGridView1.DataSource = dt;
-                    dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-
-                    // Format kolom
-                    FormatDataGridView();
                 }
                 catch (Exception ex)
                 {
@@ -72,7 +77,7 @@ namespace bookingstudio
                 dataGridView1.Columns["NamaPaket"].HeaderText = "Paket";
 
             if (dataGridView1.Columns.Contains("Tanggal"))
-                dataGridView1.Columns["Tanggal"].HeaderText = "Tanggal Booking";
+                dataGridView1.Columns["Tanggal"].HeaderText = "Tanggal Foto";
 
             if (dataGridView1.Columns.Contains("Jam"))
                 dataGridView1.Columns["Jam"].HeaderText = "Jam Foto";
@@ -81,10 +86,17 @@ namespace bookingstudio
                 dataGridView1.Columns["Status"].HeaderText = "Status Booking";
         }
 
-
         private void btnCetak_Click(object sender, EventArgs e)
         {
-            reportviewer laporan = new reportviewer(PelangganID);
+            if (dataGridView1.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Pilih riwayat booking yang ingin dicetak!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            int bookingID = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells["BookingID"].Value);
+
+            reportviewer laporan = new reportviewer(bookingID);
             laporan.Show();
         }
 
@@ -93,6 +105,5 @@ namespace bookingstudio
             _mainForm.Show();
             this.Close();
         }
-
     }
 }

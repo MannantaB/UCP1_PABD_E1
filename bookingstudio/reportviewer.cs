@@ -7,37 +7,45 @@ namespace bookingstudio
 {
     public partial class reportviewer : Form
     {
-        private int _pelangganID; // simpan ID user
+        private int _bookingID; // ID booking yang dipilih
 
-        public reportviewer(int PelangganID)
+        public reportviewer(int bookingID)
         {
             InitializeComponent();
-            _pelangganID = PelangganID;
+            _bookingID = bookingID;
         }
 
         private void reportviewer_Load(object sender, EventArgs e)
         {
-          
+            LoadInvoice();
         }
 
-        private void reportViewer1_Load(object sender, EventArgs e)
+        private void LoadInvoice()
         {
             try
             {
-                // Ambil data dari TableAdapter dengan parameter UserID
+                // Ambil data dari TableAdapter dengan parameter BookingID
                 var adapter = new RiwayatBookingSetTableAdapters.DataTable1TableAdapter();
-                DataTable dt = adapter.GetData(SessionUser.PelangganID); // Kirim parameter UserID
 
-                // Buat DataSource Report
+                // Pastikan method GetData punya parameter int bookingID
+                DataTable dt = adapter.GetData(_bookingID);
+
+                // Siapkan data source untuk ReportViewer
                 ReportDataSource rds = new ReportDataSource("DataSet1", dt);
+
+                // Bersihkan dan tambahkan data source
                 reportViewer1.LocalReport.DataSources.Clear();
-                reportViewer1.LocalReport.ReportPath = "RiwayatBookingReport.rdlc";
                 reportViewer1.LocalReport.DataSources.Add(rds);
+
+                // Pastikan path file .rdlc sesuai
+                reportViewer1.LocalReport.ReportPath = "D:\\coolyeaah!!\\smt 4\\pabd\\bookingstudio\\bookingstudio\\InvoiceReport.rdlc";
+
+                // Refresh tampilan report
                 reportViewer1.RefreshReport();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Gagal memuat laporan: " + ex.Message);
+                MessageBox.Show("Gagal memuat invoice: " + ex.Message);
             }
         }
     }

@@ -109,9 +109,6 @@
     <Compile Include="Register.Designer.cs">
       <DependentUpon>Register.cs</DependentUpon>
     </Compile>
-    <Compile Include="RiwayatBookingSet.cs">
-      <DependentUpon>RiwayatBookingSet.xsd</DependentUpon>
-    </Compile>
     <Compile Include="RiwayatBookingSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -121,6 +118,7 @@
     <EmbeddedResource Include="Booking.resx">
       <DependentUpon>Booking.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="InvoiceReport.rdlc" />
     <EmbeddedResource Include="PesananSaya.resx">
       <DependentUpon>PesananSaya.cs</DependentUpon>
     </EmbeddedResource>
@@ -156,9 +154,6 @@
     <EmbeddedResource Include="Register.resx">
       <DependentUpon>Register.cs</DependentUpon>
     </EmbeddedResource>
-    <Content Include="RiwayatBookingReport.rdlc">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

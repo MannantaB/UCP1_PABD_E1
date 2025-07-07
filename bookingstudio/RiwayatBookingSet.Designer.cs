@@ -918,22 +918,23 @@ namespace bookingstudio.RiwayatBookingSetTableAdapters {
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
             this._commandCollection[0].CommandText = @"SELECT B.BookingID, S.NamaStudio, P.NamaPaket, B.Tanggal, B.Jam, B.Status, B.PelangganID
-FROM  Booking AS B INNER JOIN
-         Studio AS S ON B.StudioID = S.StudioID LEFT OUTER JOIN
-         Paket AS P ON B.PaketID = P.PaketID
-WHERE (B.PelangganID = @PelangganID) AND (B.Status IN ('Selesai', 'Dibatalkan'))
-ORDER BY B.Tanggal DESC, B.Jam DESC";
+FROM Booking AS B
+INNER JOIN Studio AS S ON B.StudioID = S.StudioID
+LEFT OUTER JOIN Paket AS P ON B.PaketID = P.PaketID
+WHERE B.BookingID = @BookingID
+  AND B.Status IN ('Selesai', 'Dibatalkan')
+";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
-            this._commandCollection[0].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@PelangganID", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 0, 0, "PelangganID", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[0].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@BookingID", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 0, 0, "BookingID", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Fill, true)]
-        public virtual int Fill(RiwayatBookingSet.DataTable1DataTable dataTable, int PelangganID) {
+        public virtual int Fill(RiwayatBookingSet.DataTable1DataTable dataTable, int BookingID) {
             this.Adapter.SelectCommand = this.CommandCollection[0];
-            this.Adapter.SelectCommand.Parameters[0].Value = ((int)(PelangganID));
+            this.Adapter.SelectCommand.Parameters[0].Value = ((int)(BookingID));
             if ((this.ClearBeforeFill == true)) {
                 dataTable.Clear();
             }
@@ -945,9 +946,9 @@ ORDER BY B.Tanggal DESC, B.Jam DESC";
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, true)]
-        public virtual RiwayatBookingSet.DataTable1DataTable GetData(int PelangganID) {
+        public virtual RiwayatBookingSet.DataTable1DataTable GetData(int BookingID) {
             this.Adapter.SelectCommand = this.CommandCollection[0];
-            this.Adapter.SelectCommand.Parameters[0].Value = ((int)(PelangganID));
+            this.Adapter.SelectCommand.Parameters[0].Value = ((int)(BookingID));
             RiwayatBookingSet.DataTable1DataTable dataTable = new RiwayatBookingSet.DataTable1DataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
