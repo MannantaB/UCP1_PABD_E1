@@ -18,6 +18,7 @@ namespace bookingstudio
         private void Form1_Load(object sender, EventArgs e)
         {
             ClearForm();
+            txtPassword.PasswordChar = '*';
         }
 
         private void ClearForm()

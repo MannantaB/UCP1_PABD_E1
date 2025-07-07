@@ -28,14 +28,16 @@ namespace bookingstudio
                 var adapter = new RiwayatBookingSetTableAdapters.DataTable1TableAdapter();
 
                 // Pastikan method GetData punya parameter int bookingID
-                DataTable dt = adapter.GetData(_bookingID);
+                using (DataTable dt = adapter.GetData(_bookingID))
+                {
 
-                // Siapkan data source untuk ReportViewer
-                ReportDataSource rds = new ReportDataSource("DataSet1", dt);
+                    // Siapkan data source untuk ReportViewer
+                    ReportDataSource rds = new ReportDataSource("DataSet1", dt);
 
-                // Bersihkan dan tambahkan data source
-                reportViewer1.LocalReport.DataSources.Clear();
-                reportViewer1.LocalReport.DataSources.Add(rds);
+                    // Bersihkan dan tambahkan data source
+                    reportViewer1.LocalReport.DataSources.Clear();
+                    reportViewer1.LocalReport.DataSources.Add(rds);
+                }
 
                 // Pastikan path file .rdlc sesuai
                 reportViewer1.LocalReport.ReportPath = "D:\\coolyeaah!!\\smt 4\\pabd\\bookingstudio\\bookingstudio\\InvoiceReport.rdlc";
