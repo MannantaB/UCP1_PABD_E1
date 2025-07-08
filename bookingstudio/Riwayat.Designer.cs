@@ -32,6 +32,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.btnexit = new System.Windows.Forms.Button();
             this.btnCetakLporan = new System.Windows.Forms.Button();
+            this.btnRefresh = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -74,14 +75,25 @@
             // 
             this.btnCetakLporan.BackColor = System.Drawing.Color.Tan;
             this.btnCetakLporan.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnCetakLporan.Location = new System.Drawing.Point(1188, 556);
+            this.btnCetakLporan.Location = new System.Drawing.Point(1125, 556);
             this.btnCetakLporan.Name = "btnCetakLporan";
-            this.btnCetakLporan.Size = new System.Drawing.Size(206, 36);
+            this.btnCetakLporan.Size = new System.Drawing.Size(269, 36);
             this.btnCetakLporan.TabIndex = 7;
-            this.btnCetakLporan.Text = "CETAK LAPORAN ";
+            this.btnCetakLporan.Text = "Cetak Laporan ";
             this.btnCetakLporan.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnCetakLporan.UseVisualStyleBackColor = false;
             this.btnCetakLporan.Click += new System.EventHandler(this.btnCetak_Click);
+            // 
+            // btnRefresh
+            // 
+            this.btnRefresh.BackColor = System.Drawing.Color.Tan;
+            this.btnRefresh.Location = new System.Drawing.Point(921, 556);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(186, 35);
+            this.btnRefresh.TabIndex = 8;
+            this.btnRefresh.Text = "Refresh";
+            this.btnRefresh.UseVisualStyleBackColor = false;
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
             // Riwayat
             // 
@@ -90,6 +102,7 @@
             this.BackgroundImage = global::bookingstudio.Properties.Resources.Abstract_Brown_Studio_Professional_Portrait_Backdrop_M10_31___10_W_10_H_3_3m_;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1478, 658);
+            this.Controls.Add(this.btnRefresh);
             this.Controls.Add(this.btnCetakLporan);
             this.Controls.Add(this.btnexit);
             this.Controls.Add(this.label1);
@@ -108,5 +121,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnexit;
         private System.Windows.Forms.Button btnCetakLporan;
+        private System.Windows.Forms.Button btnRefresh;
     }
 }

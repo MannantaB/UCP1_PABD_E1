@@ -107,5 +107,10 @@ namespace bookingstudio
             _mainForm.Show();
             this.Close();
         }
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            LoadRiwayatBooking();
+        }
     }
 }
