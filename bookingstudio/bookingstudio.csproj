@@ -109,6 +109,9 @@
     <Compile Include="Register.Designer.cs">
       <DependentUpon>Register.cs</DependentUpon>
     </Compile>
+    <Compile Include="RiwayatBookingSet.cs">
+      <DependentUpon>RiwayatBookingSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="RiwayatBookingSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -133,7 +136,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="main.resx">
       <DependentUpon>main.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="pembayaran.resx">
       <DependentUpon>pembayaran.cs</DependentUpon>

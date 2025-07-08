@@ -37,14 +37,14 @@
             this.reportViewer1.LocalReport.ReportEmbeddedResource = "bookingstudio.InvoiceReport.rdlc";
             this.reportViewer1.Location = new System.Drawing.Point(0, 0);
             this.reportViewer1.Name = "reportViewer1";
-            this.reportViewer1.Size = new System.Drawing.Size(964, 611);
+            this.reportViewer1.Size = new System.Drawing.Size(1078, 535);
             this.reportViewer1.TabIndex = 0;
             // 
             // reportviewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(964, 611);
+            this.ClientSize = new System.Drawing.Size(1078, 535);
             this.Controls.Add(this.reportViewer1);
             this.Name = "reportviewer";
             this.Text = "reportviewer";

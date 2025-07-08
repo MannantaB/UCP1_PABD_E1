@@ -77,7 +77,7 @@ namespace bookingstudio
                 dataGridView1.Columns["NamaPaket"].HeaderText = "Paket";
 
             if (dataGridView1.Columns.Contains("Tanggal"))
-                dataGridView1.Columns["Tanggal"].HeaderText = "Tanggal Foto";
+                dataGridView1.Columns["Tanggal"].HeaderText = "Tanggal ";
 
             if (dataGridView1.Columns.Contains("Jam"))
                 dataGridView1.Columns["Jam"].HeaderText = "Jam Foto";

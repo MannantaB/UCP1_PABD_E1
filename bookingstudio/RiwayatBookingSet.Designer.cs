@@ -289,9 +289,9 @@ namespace bookingstudio {
             
             private global::System.Data.DataColumn columnJam;
             
-            private global::System.Data.DataColumn columnPelangganID;
-            
             private global::System.Data.DataColumn columnStatus;
+            
+            private global::System.Data.DataColumn columnPelangganID;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
@@ -368,17 +368,17 @@ namespace bookingstudio {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn PelangganIDColumn {
+            public global::System.Data.DataColumn StatusColumn {
                 get {
-                    return this.columnPelangganID;
+                    return this.columnStatus;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn StatusColumn {
+            public global::System.Data.DataColumn PelangganIDColumn {
                 get {
-                    return this.columnStatus;
+                    return this.columnPelangganID;
                 }
             }
             
@@ -419,7 +419,7 @@ namespace bookingstudio {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public DataTable1Row AddDataTable1Row(string NamaStudio, string NamaPaket, System.DateTime Tanggal, System.TimeSpan Jam, int PelangganID, string Status) {
+            public DataTable1Row AddDataTable1Row(string NamaStudio, string NamaPaket, System.DateTime Tanggal, System.TimeSpan Jam, string Status, int PelangganID) {
                 DataTable1Row rowDataTable1Row = ((DataTable1Row)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         null,
@@ -427,8 +427,8 @@ namespace bookingstudio {
                         NamaPaket,
                         Tanggal,
                         Jam,
-                        PelangganID,
-                        Status};
+                        Status,
+                        PelangganID};
                 rowDataTable1Row.ItemArray = columnValuesArray;
                 this.Rows.Add(rowDataTable1Row);
                 return rowDataTable1Row;
@@ -463,8 +463,8 @@ namespace bookingstudio {
                 this.columnNamaPaket = base.Columns["NamaPaket"];
                 this.columnTanggal = base.Columns["Tanggal"];
                 this.columnJam = base.Columns["Jam"];
-                this.columnPelangganID = base.Columns["PelangganID"];
                 this.columnStatus = base.Columns["Status"];
+                this.columnPelangganID = base.Columns["PelangganID"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -480,10 +480,10 @@ namespace bookingstudio {
                 base.Columns.Add(this.columnTanggal);
                 this.columnJam = new global::System.Data.DataColumn("Jam", typeof(global::System.TimeSpan), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnJam);
-                this.columnPelangganID = new global::System.Data.DataColumn("PelangganID", typeof(int), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnPelangganID);
                 this.columnStatus = new global::System.Data.DataColumn("Status", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnStatus);
+                this.columnPelangganID = new global::System.Data.DataColumn("PelangganID", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnPelangganID);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnBookingID}, true));
                 this.columnBookingID.AutoIncrement = true;
@@ -497,9 +497,9 @@ namespace bookingstudio {
                 this.columnNamaPaket.MaxLength = 50;
                 this.columnTanggal.AllowDBNull = false;
                 this.columnJam.AllowDBNull = false;
-                this.columnPelangganID.AllowDBNull = false;
                 this.columnStatus.AllowDBNull = false;
                 this.columnStatus.MaxLength = 20;
+                this.columnPelangganID.AllowDBNull = false;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -702,23 +702,23 @@ namespace bookingstudio {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public int PelangganID {
-                get {
-                    return ((int)(this[this.tableDataTable1.PelangganIDColumn]));
-                }
-                set {
-                    this[this.tableDataTable1.PelangganIDColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public string Status {
                 get {
                     return ((string)(this[this.tableDataTable1.StatusColumn]));
                 }
                 set {
                     this[this.tableDataTable1.StatusColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public int PelangganID {
+                get {
+                    return ((int)(this[this.tableDataTable1.PelangganIDColumn]));
+                }
+                set {
+                    this[this.tableDataTable1.PelangganIDColumn] = value;
                 }
             }
             
@@ -899,8 +899,8 @@ namespace bookingstudio.RiwayatBookingSetTableAdapters {
             tableMapping.ColumnMappings.Add("NamaPaket", "NamaPaket");
             tableMapping.ColumnMappings.Add("Tanggal", "Tanggal");
             tableMapping.ColumnMappings.Add("Jam", "Jam");
-            tableMapping.ColumnMappings.Add("PelangganID", "PelangganID");
             tableMapping.ColumnMappings.Add("Status", "Status");
+            tableMapping.ColumnMappings.Add("PelangganID", "PelangganID");
             this._adapter.TableMappings.Add(tableMapping);
         }
         
@@ -918,12 +918,10 @@ namespace bookingstudio.RiwayatBookingSetTableAdapters {
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
             this._commandCollection[0].CommandText = @"SELECT B.BookingID, S.NamaStudio, P.NamaPaket, B.Tanggal, B.Jam, B.Status, B.PelangganID
-FROM Booking AS B
-INNER JOIN Studio AS S ON B.StudioID = S.StudioID
-LEFT OUTER JOIN Paket AS P ON B.PaketID = P.PaketID
-WHERE B.BookingID = @BookingID
-  AND B.Status IN ('Selesai', 'Dibatalkan')
-";
+FROM  Booking AS B INNER JOIN
+         Studio AS S ON B.StudioID = S.StudioID LEFT OUTER JOIN
+         Paket AS P ON B.PaketID = P.PaketID
+WHERE (B.BookingID = @BookingID) AND (B.Status IN ('Selesai', 'Dibatalkan'))";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[0].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@BookingID", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 0, 0, "BookingID", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
         }
