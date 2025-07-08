@@ -12,6 +12,9 @@ namespace bookingstudio
         private string connectionString = "Data Source=DESKTOP-JNH7B7M\\MANNANTA;Initial Catalog=BookingStudio;Integrated Security=True";
         private int currentPelangganID;
         private main _mainForm;
+        private Form _pesananSayaForm;
+        private main main;
+        private int pelangganID;
 
         public bool IsEditMode { get; set; } = false;
         public int BookingIDToEdit { get; set; } = 0;
@@ -35,14 +38,16 @@ namespace bookingstudio
             }
         }
 
-        public Booking(main mainForm, int pelangganId)
+        public Booking(main mainForm, Form pesananSayaForm, int pelangganId)
         {
             InitializeComponent();
             _mainForm = mainForm;
+            _pesananSayaForm = pesananSayaForm;
             currentPelangganID = pelangganId;
             datePickerTanggal.Value = DateTime.Now;
             LoadComboBoxData();
         }
+
 
         public class BookingData
         {
@@ -58,7 +63,14 @@ namespace bookingstudio
             DialogResult result = MessageBox.Show("Apakah Anda yakin ingin keluar?", "Konfirmasi", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
             {
-                if (_mainForm != null) _mainForm.Show();
+                if (_pesananSayaForm != null)
+                {
+                    _pesananSayaForm.Show(); // kembali ke form PesananSaya
+                }
+                else if (_mainForm != null)
+                {
+                    _mainForm.Show(); // kembali ke form main jika tidak dari PesananSaya
+                }
                 this.Close();
             }
         }

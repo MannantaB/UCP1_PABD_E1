@@ -29,14 +29,14 @@ namespace bookingstudio
 
         private void button1_Click(object sender, EventArgs e)
         {
-            profil formprofil = new profil(this); 
-            formprofil.Show();                 
+            profil formprofil = new profil(this);
+            formprofil.Show();
             this.Hide();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Booking formBooking = new Booking(this, SessionUser.PelangganID); // atau ID login valid
+            Booking formBooking = new Booking(this, null, SessionUser.PelangganID); // atau ID login valid
             formBooking.Show();
             this.Hide();
         }

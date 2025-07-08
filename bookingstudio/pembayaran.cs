@@ -10,17 +10,20 @@ namespace bookingstudio
     {
         private int _bookingID;
         private string _mode; // "booking" atau "pesanan"
+        private Form _PesananSayaForm;
+
         private string connectionString = "Data Source=DESKTOP-JNH7B7M\\MANNANTA;Initial Catalog=BookingStudio;Integrated Security=True";
         private string selectedFilePath;
         private string folderPath;
 
         private const long MaxFileSize = 2 * 1024 * 1024; // 2 MB
 
-        public pembayaran(int bookingID, string mode = "booking")
+        public pembayaran(int bookingID, string mode = "booking", Form pesananSayaForm = null)
         {
             InitializeComponent();
             _bookingID = bookingID;
             _mode = mode;
+            _PesananSayaForm = pesananSayaForm;
 
             string projectRootPath = @"C:\VISUALSTUDIO2022";
             folderPath = Path.Combine(projectRootPath, "BuktiBayar");
@@ -34,6 +37,11 @@ namespace bookingstudio
             if (_mode == "pesanan")
             {
                 btnPayLater.Visible = false;
+                btnExit.Visible = true;
+            }
+            else
+            {
+                btnExit.Visible = false;
             }
         }
 
@@ -155,6 +163,16 @@ namespace bookingstudio
             string query = "SELECT * FROM Pembayaran WHERE BookingID = @bookingID";
             query = query.Replace("@bookingID", _bookingID.ToString());
             AnalyzeQuery(query);
+        }
+
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            if (_PesananSayaForm != null)
+            {
+                _PesananSayaForm.Show();
+            }
+
+            this.Close();
         }
     }
 }

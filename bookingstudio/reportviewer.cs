@@ -8,11 +8,13 @@ namespace bookingstudio
     public partial class reportviewer : Form
     {
         private int _bookingID; // ID booking yang dipilih
+        private Form _riwayatForm;
 
-        public reportviewer(int bookingID)
+        public reportviewer(int bookingID, Form riwayatForm)
         {
             InitializeComponent();
             _bookingID = bookingID;
+            _riwayatForm = riwayatForm;
         }
 
         private void reportviewer_Load(object sender, EventArgs e)
@@ -47,6 +49,15 @@ namespace bookingstudio
             {
                 MessageBox.Show("Gagal memuat invoice: " + ex.Message);
             }
+        }
+
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            // Tampilkan kembali form Riwayat
+            _riwayatForm.Show();
+
+            // Tutup reportviewer
+            this.Close();
         }
     }
 }

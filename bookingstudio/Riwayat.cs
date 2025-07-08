@@ -96,7 +96,9 @@ namespace bookingstudio
 
             int bookingID = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells["BookingID"].Value);
 
-            reportviewer laporan = new reportviewer(bookingID);
+            this.Hide();
+
+            reportviewer laporan = new reportviewer(bookingID, this);
             laporan.Show();
         }
 

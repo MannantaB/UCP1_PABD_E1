@@ -35,6 +35,7 @@
             this.btnPayNow = new System.Windows.Forms.Button();
             this.btnAnalyze = new System.Windows.Forms.Button();
             this.btnPayLater = new System.Windows.Forms.Button();
+            this.btnExit = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -101,6 +102,16 @@
             this.btnPayLater.UseVisualStyleBackColor = true;
             this.btnPayLater.Click += new System.EventHandler(this.btnPayLater_Click);
             // 
+            // btnExit
+            // 
+            this.btnExit.Location = new System.Drawing.Point(776, 44);
+            this.btnExit.Name = "btnExit";
+            this.btnExit.Size = new System.Drawing.Size(132, 47);
+            this.btnExit.TabIndex = 15;
+            this.btnExit.Text = "Exit";
+            this.btnExit.UseVisualStyleBackColor = true;
+            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
+            // 
             // pembayaran
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
@@ -108,6 +119,7 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(967, 774);
+            this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnPayLater);
             this.Controls.Add(this.btnAnalyze);
             this.Controls.Add(this.btnPayNow);
@@ -130,5 +142,6 @@
         private System.Windows.Forms.Button btnPayNow;
         private System.Windows.Forms.Button btnAnalyze;
         private System.Windows.Forms.Button btnPayLater;
+        private System.Windows.Forms.Button btnExit;
     }
 }

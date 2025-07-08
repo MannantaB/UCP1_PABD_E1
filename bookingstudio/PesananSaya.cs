@@ -103,7 +103,7 @@ namespace bookingstudio
                         string paketFormatted = $"{paketID} | {namaPaket} | {harga}";
 
                         // ✅ Pastikan ID pelanggan dikirim ke form Booking
-                        Booking formBooking = new Booking(PelangganID)
+                        Booking formBooking = new Booking(null, this, PelangganID)
                         {
                             IsEditMode = true,
                             BookingIDToEdit = bookingID,
@@ -185,7 +185,7 @@ namespace bookingstudio
             if (bookingID == -1) return;
 
             // Buka form pembayaran dengan mode 'pesanan'
-            pembayaran formPembayaran = new pembayaran(bookingID, "pesanan");
+            pembayaran formPembayaran = new pembayaran(bookingID, "pesanan", this);
             formPembayaran.Show();
             this.Hide();
         }
