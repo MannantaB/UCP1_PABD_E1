@@ -10,7 +10,7 @@ namespace bookingstudio
     public partial class profil : Form
     {
         koneksi kn = new koneksi();
-        // 🔥 Inisialisasi cache
+       
         private readonly MemoryCache _cache = MemoryCache.Default;
         private string CacheKey => $"Profil_{SessionUser.PelangganID}";
         private readonly CacheItemPolicy _policy = new CacheItemPolicy { AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(5) };
@@ -107,7 +107,7 @@ namespace bookingstudio
                     int rows = cmd.ExecuteNonQuery();
                     if (rows > 0)
                     {
-                        // 🔥 Hapus cache setelah update berhasil
+                        //Hapus cache setelah update berhasil
                         _cache.Remove(CacheKey);
                         MessageBox.Show("Profil berhasil diperbarui!");
                     }

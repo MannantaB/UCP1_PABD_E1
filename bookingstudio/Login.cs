@@ -52,12 +52,12 @@ namespace bookingstudio
 
                     if (reader.Read())
                     {
-                        // ✅ Ambil data dari hasil query login
-                        SessionUser.PelangganID = reader.GetInt32(0);         // PelangganID
-                        SessionUser.Nama = reader["Nama"].ToString();        // Nama
-                        SessionUser.Email = reader["Email"].ToString();      // Email
+                        // Ambil data dari hasil query login
+                        SessionUser.PelangganID = reader.GetInt32(0);         
+                        SessionUser.Nama = reader["Nama"].ToString();        
+                        SessionUser.Email = reader["Email"].ToString();      
 
-                        // ✅ Buka form utama
+                        // Buka form utama
                         main mainForm = new main();
                         mainForm.Show();
                         this.Hide();

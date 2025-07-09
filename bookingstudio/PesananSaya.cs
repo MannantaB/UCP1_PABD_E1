@@ -12,7 +12,7 @@ namespace bookingstudio
         private int PelangganID;
         private main _mainForm;
 
-        // ✅ Constructor diperbaiki agar menerima PelangganID
+        //Constructor diperbaiki agar menerima PelangganID
         public PesananSaya(main mainForm, int pelangganId)
         {
             InitializeComponent();
@@ -102,7 +102,7 @@ namespace bookingstudio
 
                         string paketFormatted = $"{paketID} | {namaPaket} | {harga}";
 
-                        // ✅ Pastikan ID pelanggan dikirim ke form Booking
+                        //Pastikan ID pelanggan dikirim ke form Booking
                         Booking formBooking = new Booking(null, this, PelangganID)
                         {
                             IsEditMode = true,

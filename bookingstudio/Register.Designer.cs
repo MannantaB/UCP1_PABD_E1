@@ -89,7 +89,6 @@
             this.label4.Size = new System.Drawing.Size(138, 36);
             this.label4.TabIndex = 3;
             this.label4.Text = "TELEPON";
-            this.label4.Click += new System.EventHandler(this.label4_Click);
             // 
             // txtNama
             // 
@@ -98,7 +97,6 @@
             this.txtNama.Name = "txtNama";
             this.txtNama.Size = new System.Drawing.Size(318, 44);
             this.txtNama.TabIndex = 4;
-            this.txtNama.TextChanged += new System.EventHandler(this.txtNama_TextChanged);
             // 
             // txtEmail
             // 
@@ -107,7 +105,6 @@
             this.txtEmail.Name = "txtEmail";
             this.txtEmail.Size = new System.Drawing.Size(318, 44);
             this.txtEmail.TabIndex = 5;
-            this.txtEmail.TextChanged += new System.EventHandler(this.txtEmail_TextChanged);
             // 
             // txtPassword
             // 
@@ -116,7 +113,6 @@
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.Size = new System.Drawing.Size(318, 44);
             this.txtPassword.TabIndex = 6;
-            this.txtPassword.TextChanged += new System.EventHandler(this.txtPassword_TextChanged);
             // 
             // txtTelepon
             // 
@@ -125,7 +121,6 @@
             this.txtTelepon.Name = "txtTelepon";
             this.txtTelepon.Size = new System.Drawing.Size(318, 44);
             this.txtTelepon.TabIndex = 7;
-            this.txtTelepon.TextChanged += new System.EventHandler(this.txtTelepon_TextChanged);
             // 
             // btnDaftar
             // 
@@ -179,7 +174,6 @@
             this.Controls.Add(this.label1);
             this.Name = "Register";
             this.Text = "Register";
-            this.Load += new System.EventHandler(this.Register_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

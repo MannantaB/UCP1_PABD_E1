@@ -3,7 +3,7 @@ using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Windows.Forms;
-using System.Runtime.Caching; // <--- untuk MemoryCache
+using System.Runtime.Caching;
 
 namespace bookingstudio
 {
@@ -25,7 +25,7 @@ namespace bookingstudio
             InitializeComponent();
             currentPelangganID = pelangganID;
             datePickerTanggal.Value = DateTime.Now;
-            datePickerTanggal.MinDate = DateTime.Today; // Mencegah pilih tanggal kemarin
+            datePickerTanggal.MinDate = DateTime.Today; 
             numericJam.Maximum = 22;
             numericJam.Minimum = 8;
             LoadComboBoxData();
@@ -170,7 +170,7 @@ namespace bookingstudio
                             transaction.Commit();
                             MessageBox.Show("Booking berhasil diperbarui!", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                            OnBookingUpdated?.Invoke(); // 🔥 Notifikasi ke PesananSaya
+                            OnBookingUpdated?.Invoke(); 
                             this.Close();
                         }
                         else
@@ -224,7 +224,7 @@ namespace bookingstudio
             cmbStudio.SelectedIndex = -1;
             cmbPaket.SelectedIndex = -1;
             datePickerTanggal.Value = DateTime.Now;
-            numericJam.Value = numericJam.Minimum; // Gunakan nilai minimum yang valid
+            numericJam.Value = numericJam.Minimum; 
         }
 
         private void LoadComboBoxData()
@@ -268,34 +268,80 @@ namespace bookingstudio
             MemoryCache.Default.Remove($"RiwayatBooking_{currentPelangganID}");
         }
 
-        private void AnalyzeQuery(string sqlQuery)
+        private void AnalyzeQuery(string sqlQuery, SqlParameter[] parameters = null)
         {
-            using (var conn = new SqlConnection(kn.ConnectionString()))
+            if (string.IsNullOrWhiteSpace(sqlQuery))
             {
-                conn.InfoMessage += (s, e) => MessageBox.Show(e.Message, "STATISTICS INFO");
-                conn.Open();
-                var wrapped = $@"
-                    SET STATISTICS IO ON;
-                    SET STATISTICS TIME ON;
-                    {sqlQuery};
-                    SET STATISTICS IO OFF;
-                    SET STATISTICS TIME OFF;";
-                using (var cmd = new SqlCommand(wrapped, conn))
+                MessageBox.Show("Query kosong atau tidak valid.", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string trimmedQuery = sqlQuery.Trim();
+            if (!trimmedQuery.StartsWith("SELECT", StringComparison.OrdinalIgnoreCase))
+            {
+                MessageBox.Show("AnalyzeQuery hanya mendukung query SELECT.", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            try
+            {
+                using (var conn = new SqlConnection(kn.ConnectionString()))
                 {
-                    cmd.ExecuteNonQuery();
+                    conn.InfoMessage += (s, e) =>
+                    {
+                        foreach (var message in e.Message.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries))
+                        {
+                            MessageBox.Show(message, "STATISTICS INFO", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                    };
+
+                    conn.Open();
+
+                    string wrappedQuery = $@"
+                SET STATISTICS IO ON;
+                SET STATISTICS TIME ON;
+                {sqlQuery};
+                SET STATISTICS IO OFF;
+                SET STATISTICS TIME OFF;";
+
+                    using (var cmd = new SqlCommand(wrappedQuery, conn))
+                    {
+                        if (parameters != null)
+                        {
+                            cmd.Parameters.AddRange(parameters);
+                        }
+
+                        cmd.ExecuteNonQuery();
+                    }
                 }
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show("SQL Error: " + ex.Message, "SQL Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message, "Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void btnAnalyze_Click_1(object sender, EventArgs e)
         {
             string query = @"
-                SELECT b.BookingID, s.NamaStudio, p.NamaPaket, b.Tanggal, b.Jam
-                FROM Booking b
-                JOIN Studio s ON b.StudioID = s.StudioID
-                JOIN Paket p ON b.PaketID = p.PaketID
-                WHERE b.PelangganID = {currentPelangganID}";
-            AnalyzeQuery(query);
+        SELECT b.BookingID, s.NamaStudio, p.NamaPaket, b.Tanggal, b.Jam
+        FROM Booking b
+        JOIN Studio s ON b.StudioID = s.StudioID
+        JOIN Paket p ON b.PaketID = p.PaketID
+        WHERE b.PelangganID = @PelangganID";
+
+            SqlParameter[] parameters =
+            {
+        new SqlParameter("@PelangganID", currentPelangganID)
+    };
+
+            AnalyzeQuery(query, parameters);
         }
+        
+
     }
 }

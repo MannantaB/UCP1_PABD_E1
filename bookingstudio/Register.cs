@@ -19,26 +19,6 @@ namespace bookingstudio
             InitializeComponent();
         }
 
-        private void txtNama_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void txtEmail_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void txtPassword_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void txtTelepon_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void btnDaftar_Click(object sender, EventArgs e)
         {
             string nama = txtNama.Text.Trim();
@@ -52,13 +32,24 @@ namespace bookingstudio
                 return;
             }
 
+            if (password.Length < 8)
+            {
+                MessageBox.Show("Password minimal 8 karakter!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (!password.Any(c => "%[!@#$%^&*()]%".Contains(c)))
+            {
+                MessageBox.Show("Password harus mengandung minimal 1 karakter spesial (!@#$%^&*())", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             using (SqlConnection conn = new SqlConnection(kn.ConnectionString()))
             {
                 try
                 {
                     conn.Open();
 
-                    // Cek apakah email sudah terdaftar
                     string cekEmail = "SELECT COUNT(*) FROM Pelanggan WHERE Email = @Email";
                     SqlCommand cekCmd = new SqlCommand(cekEmail, conn);
                     cekCmd.Parameters.AddWithValue("@Email", email);
@@ -70,7 +61,7 @@ namespace bookingstudio
                         return;
                     }
 
-                    // Panggil Stored Procedure sp_register_pelanggan
+                    // Panggil Stored Procedure spAddRegister
                     SqlCommand cmd = new SqlCommand("spAddRegister", conn);
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@Nama", nama);
@@ -101,16 +92,6 @@ namespace bookingstudio
             }
         }
 
-
-        private void Register_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label4_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void button1_Click(object sender, EventArgs e)
         {
