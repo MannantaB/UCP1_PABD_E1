@@ -8,11 +8,12 @@ namespace bookingstudio
 {
     public partial class pembayaran : Form
     {
+        koneksi kn = new koneksi();
         private int _bookingID;
         private string _mode; // "booking" atau "pesanan"
         private Form _PesananSayaForm;
 
-        private string connectionString = "Data Source=DESKTOP-JNH7B7M\\MANNANTA;Initial Catalog=BookingStudio;Integrated Security=True";
+        
         private string selectedFilePath;
         private string folderPath;
 
@@ -79,7 +80,7 @@ namespace bookingstudio
                 }
 
                 // Simpan data ke database
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlConnection conn = new SqlConnection(kn.ConnectionString()))
                 {
                     conn.Open();
                     SqlTransaction transaction = conn.BeginTransaction();
@@ -120,7 +121,7 @@ namespace bookingstudio
         private void btnPayLater_Click(object sender, EventArgs e)
         {
             // Update status booking jadi 'Diajukan'
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(kn.ConnectionString()))
             {
                 conn.Open();
 
@@ -139,7 +140,7 @@ namespace bookingstudio
 
         private void AnalyzeQuery(string sqlQuery)
         {
-            using (var conn = new SqlConnection(connectionString))
+            using (var conn = new SqlConnection(kn.ConnectionString()))
             {
                 conn.InfoMessage += (s, e) => MessageBox.Show(e.Message, "STATISTICS INFO");
                 conn.Open();

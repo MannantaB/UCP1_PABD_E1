@@ -59,6 +59,7 @@
     <Compile Include="Booking.Designer.cs">
       <DependentUpon>Booking.cs</DependentUpon>
     </Compile>
+    <Compile Include="koneksi.cs" />
     <Compile Include="PesananSaya.cs">
       <SubType>Form</SubType>
     </Compile>

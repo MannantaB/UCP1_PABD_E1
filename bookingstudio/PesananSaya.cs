@@ -8,8 +8,8 @@ namespace bookingstudio
 {
     public partial class PesananSaya : Form
     {
+        koneksi kn = new koneksi();
         private int PelangganID;
-        private string connectionString = "Data Source=DESKTOP-JNH7B7M\\MANNANTA;Initial Catalog=BookingStudio;Integrated Security=True";
         private main _mainForm;
 
         // ✅ Constructor diperbaiki agar menerima PelangganID
@@ -35,7 +35,7 @@ namespace bookingstudio
                 return;
             }
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(kn.ConnectionString()))
             {
                 SqlCommand cmd = new SqlCommand("spGetPesananAktif", conn);
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -79,7 +79,7 @@ namespace bookingstudio
 
         private void EditBooking(int bookingID)
         {
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(kn.ConnectionString()))
             {
                 SqlCommand cmd = new SqlCommand("spGetBookingDetail", conn);
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -153,7 +153,7 @@ namespace bookingstudio
 
         private void UpdateStatus(int bookingID, string status)
         {
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(kn.ConnectionString()))
             {
                 SqlCommand cmd = new SqlCommand("spUpdateStatusBooking", conn);
                 cmd.CommandType = CommandType.StoredProcedure;

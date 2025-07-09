@@ -9,8 +9,7 @@ namespace bookingstudio
 {
     public partial class profil : Form
     {
-        private string connectionString = "Data Source=DESKTOP-JNH7B7M\\MANNANTA;Initial Catalog=BookingStudio;Integrated Security=True";
-
+        koneksi kn = new koneksi();
         // 🔥 Inisialisasi cache
         private readonly MemoryCache _cache = MemoryCache.Default;
         private string CacheKey => $"Profil_{SessionUser.PelangganID}";
@@ -22,6 +21,7 @@ namespace bookingstudio
         {
             InitializeComponent();
             _mainForm = mainForm;
+            LoadDataUser();
         }
 
         private void profil_Load(object sender, EventArgs e)
@@ -49,15 +49,18 @@ namespace bookingstudio
             else
             {
                 dt = new DataTable();
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlConnection conn = new SqlConnection(kn.ConnectionString()))
                 {
                     try
                     {
                         conn.Open();
-                        SqlCommand cmd = new SqlCommand("SELECT Nama, Email, Password, Telepon FROM Pelanggan WHERE ID = @ID", conn);
-                        cmd.Parameters.AddWithValue("@ID", SessionUser.PelangganID);
+                        SqlCommand cmd = new SqlCommand("SELECT Nama, Email, Password, Telepon FROM Pelanggan WHERE PelangganID = @PelangganID", conn);
+                        cmd.Parameters.AddWithValue("@PelangganID", SessionUser.PelangganID);
+                       
                         SqlDataAdapter da = new SqlDataAdapter(cmd);
                         da.Fill(dt);
+
+
 
                         // Simpan ke cache
                         _cache.Set(CacheKey, dt, _policy);
@@ -87,7 +90,7 @@ namespace bookingstudio
                 return;
             }
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(kn.ConnectionString()))
             {
                 try
                 {
@@ -124,6 +127,11 @@ namespace bookingstudio
         {
             _mainForm.Show();
             this.Close();
+        }
+
+        private void txtNama_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -8,8 +8,7 @@ namespace bookingstudio
 {
     public partial class Login : Form
     {
-        private string connectionString = "Data Source=DESKTOP-JNH7B7M\\MANNANTA;Initial Catalog=BookingStudio;Integrated Security=True";
-
+        koneksi kn = new koneksi();
         public Login()
         {
             InitializeComponent();
@@ -38,7 +37,7 @@ namespace bookingstudio
                 return;
             }
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(kn.ConnectionString()))
             {
                 try
                 {
@@ -84,7 +83,7 @@ namespace bookingstudio
 
         private void AnalyzeQuery(string sqlQuery)
         {
-            using (var conn = new SqlConnection(connectionString))
+            using (var conn = new SqlConnection(kn.ConnectionString()))
             {
                 conn.InfoMessage += (s, e) => MessageBox.Show(e.Message, "STATISTICS INFO");
                 conn.Open();

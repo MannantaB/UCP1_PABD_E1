@@ -7,8 +7,8 @@ namespace bookingstudio
 {
     public partial class Riwayat : Form
     {
+        koneksi kn = new koneksi();
         private int PelangganID;
-        private string connectionString = "Data Source=DESKTOP-JNH7B7M\\MANNANTA;Initial Catalog=BookingStudio;Integrated Security=True";
         private main _mainForm;
 
         public Riwayat(main mainForm, int PelangganId)
@@ -16,6 +16,7 @@ namespace bookingstudio
             InitializeComponent();
             _mainForm = mainForm;
             PelangganID = PelangganId;
+            LoadRiwayatBooking();
         }
 
         private void Riwayat_Load(object sender, EventArgs e)
@@ -25,7 +26,7 @@ namespace bookingstudio
 
         private void LoadRiwayatBooking()
         {
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(kn.ConnectionString()))
             {
                 try
                 {

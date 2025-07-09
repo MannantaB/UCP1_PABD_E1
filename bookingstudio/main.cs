@@ -15,7 +15,7 @@ namespace bookingstudio
 
     public partial class main : Form
     {
-        private string connectionString = "Data Source=DESKTOP-JNH7B7M\\MANNANTA;Initial Catalog=BookingStudio;Integrated Security=True";
+        koneksi kn = new koneksi();
         public main()
         {
             InitializeComponent();
@@ -77,7 +77,7 @@ namespace bookingstudio
 
         private void EnsureIndexes()
         {
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(kn.ConnectionString()))
             {
                 conn.Open();
                 string query = @"

@@ -1,4 +1,5 @@
 ﻿using bookingstudio;
+using System;
 
 namespace bookingstudio
 {
@@ -73,6 +74,7 @@ namespace bookingstudio
             this.datePickerTanggal.Name = "datePickerTanggal";
             this.datePickerTanggal.Size = new System.Drawing.Size(333, 38);
             this.datePickerTanggal.TabIndex = 7;
+            this.datePickerTanggal.MinDate = DateTime.Today;
             // 
             // cmbStudio
             // 
@@ -117,6 +119,8 @@ namespace bookingstudio
             0,
             0,
             0});
+            this.numericJam.Minimum = 8;
+            this.numericJam.Maximum = 22;
             // 
             // panel1
             // 

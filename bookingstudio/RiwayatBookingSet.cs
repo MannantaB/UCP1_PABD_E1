@@ -9,3 +9,10 @@
         }
     }
 }
+
+namespace bookingstudio.RiwayatBookingSetTableAdapters {
+    
+    
+    public partial class DataTable1TableAdapter {
+    }
+}
